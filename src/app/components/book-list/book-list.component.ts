@@ -1,39 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { BookService } from '../../services/book.service';
-import { Book } from '../../models/book.model';
+import { Component } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css'],
+  standalone: true,
+  imports: [MatTableModule, MatButtonModule],
 })
-export class BookListComponent implements OnInit {
-  books: Book[] = [];
+export class BookListComponent {
+  books = [
+    { id: 1, title: 'Book One', author: 'Author One' },
+    { id: 2, title: 'Book Two', author: 'Author Two' },
+  ];
   displayedColumns: string[] = ['id', 'title', 'author', 'actions'];
 
-  constructor(private bookService: BookService) {}
-
-  ngOnInit(): void {
-    this.loadBooks();
+  onAddBook() {
+    console.log('Add Book');
   }
 
-  loadBooks(): void {
-    this.bookService.getBooks().subscribe((data) => {
-      this.books = data;
-    });
+  onEditBook(book: any) {
+    console.log('Edit Book', book);
   }
 
-  onAddBook(): void {
-    // Navigate to the BookFormComponent or toggle its visibility
-  }
-
-  onEditBook(book: Book): void {
-    // Pass data to the BookFormComponent for editing
-  }
-
-  onDeleteBook(id: number): void {
-    this.bookService.deleteBook(id).subscribe(() => {
-      this.loadBooks();
-    });
+  onDeleteBook(bookId: number) {
+    console.log('Delete Book', bookId);
   }
 }

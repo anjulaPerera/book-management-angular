@@ -1,19 +1,35 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BookService } from '../../services/book.service';
-import { Book } from '../../models/book.model';
+import { Component } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-book-form',
   templateUrl: './book-form.component.html',
   styleUrls: ['./book-form.component.css'],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
 })
-export class BookFormComponent implements OnInit {
-  @Input() book?: Book;
+export class BookFormComponent {
   bookForm: FormGroup;
   isEdit = false;
 
-  constructor(private fb: FormBuilder, private bookService: BookService) {
+  constructor(private fb: FormBuilder) {
     this.bookForm = this.fb.group({
       title: ['', Validators.required],
       author: ['', Validators.required],
@@ -22,19 +38,9 @@ export class BookFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    if (this.book) {
-      this.isEdit = true;
-      this.bookForm.patchValue(this.book);
-    }
-  }
-
-  onSubmit(): void {
-    const book: Book = this.bookForm.value;
-    if (this.isEdit) {
-      this.bookService.updateBook({ ...this.book, ...book }).subscribe();
-    } else {
-      this.bookService.addBook(book).subscribe();
+  onSubmit() {
+    if (this.bookForm.valid) {
+      console.log('Form Submitted', this.bookForm.value);
     }
   }
 }
